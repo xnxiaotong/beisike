@@ -6,8 +6,6 @@ import { UsersData } from './data/userInfo'
 let mock = new MockAdapter(axios);
 // 引入storejs 根据内存做判断
 import Store from "storejs"
-// var userlist = UsersData;
-// Store.set("userlist", userlist)
 mock.onGet('/login').reply(config => {
     // console.log(config.params) //里面有传过来的参数
     // 做一个数据效验
@@ -15,15 +13,6 @@ mock.onGet('/login').reply(config => {
         code: 200,
         msg: ''
     };
-    // console.log(UsersData);
-    // if (userlist[0].username == config.params.username && userlist[0].password == config.params.password) {//写判断的条件
-    //     data.msg = "登陆成功";
-    //     data.code = 200;
-    //     data.userinfo = userlist[0];
-    // } else {
-    //     data.msg = "账号或者密码错误";
-    //     data.code = 500
-    // }
     var userlist = Store.get("userlist") || UsersData;
 
     userlist.forEach(ele => {
@@ -42,27 +31,28 @@ mock.onGet('/login').reply(config => {
     return [200, data];
 
 });
+var userinfo=UsersData;
 mock.onGet('/reg').reply(config => {
-    var data = { code: 0, msg: "", };
+    console.log(userinfo);
+    var data = { code: 0, msg: "", data: {} };
     var info = config.params;
-    // console.log(info.username);
-    var userlist = Store.get("userlist") ? Store.get("userlist") : UsersData;
-    userlist.forEach(ele => {
-        if (ele.username == info.username) {
+    for (var i = 0; i < userinfo.length; i++) {
+        if (userinfo[i].username == info.username) {
             data.msg = "用户名已经存在";
+            data.data.code = 0;
+            return [200, data];
         } else if (info.username && info.password && info.name) {
             data.msg = "注册成功";
-            data.code = 1;
-            info.avatar = 'https://avatars0.githubusercontent.com/u/22588905?v=4&s=120';
-            userlist.push(info);
-            // console.log(userlist);
-            Store.set("userlist", userlist)
+            data.data.code = 1;
+            info.avatar = 'https://avatars0.githubusercontent.com/u/22588905?v=4&s=120',
+            userinfo.push(info);
+            return [200, data];
         } else {
-            data.code = -1;
+            data.data.code = -1;
             data.msg = "请把信息填写完整";
+            return [200, data];
         }
-    })
-    // console.log(UsersData);
+    }
     return [200, data];
 })
 

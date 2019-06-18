@@ -15,6 +15,7 @@
     <p>
       <label>
         <span>头像:</span>
+        <i v-fileUpload="setInputFile">点击上传头像</i>
       </label>
     </p>
     <p>
@@ -26,6 +27,7 @@
     <p>
       <button class="log" @click="Mockreg">注册</button>
     </p>
+    <img :src="url" alt>
   </div>
 </template>
 <script>
@@ -36,26 +38,36 @@ export default {
     return {
       username: "",
       password: "",
-      name: ""
+      name: "",
+      setInputFile: {
+        fn: "fileUpload", //函数
+        multiple: false //设置是否多张上传
+      },
+      url: ""
     };
   },
   methods: {
+    fileUpload(url) {
+      this.url = url;
+    },
     Mockreg() {
       var params = {
         username: this.username,
         password: this.password,
-        // avatar: this.avatar,
+        // avatar: this.url,
         name: this.name,
         id: Mock.Random.guid()
       };
       this.$apis.Mockreg(params).then(res => {
-        if (res.data.code == 1) {
+        console.log(res);
+        if (res.data.data.code == 1) {
           alert("注册成功");
-        } else if (res.data.code == -1) {
+        } else if (res.data.data.code == -1) {
           alert("信息不完整");
         } else {
           alert("用户名已经存在");
         }
+        // console.log(res);
       });
     }
   },
@@ -77,6 +89,15 @@ export default {
       float: left;
       width: 20%;
       height: 100%;
+    }
+    i {
+      display: block;
+      float: left;
+      height: 100%;
+      width: 50%;
+      margin-left: 10%;
+      border: 1px solid #b9e9eb;
+      font-style: normal;
     }
     input {
       display: block;
