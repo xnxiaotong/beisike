@@ -25,7 +25,7 @@ export default new Router({
           name: 'cclass',
           component: resolve => require(['@/components/main/cclass'], resolve),
           meta: {
-            keepAlive: true,  //true 禁止重复加载, false不禁止
+            keepAlive: false,  //true 禁止重复加载, false不禁止
             title: '分类',
 
           },

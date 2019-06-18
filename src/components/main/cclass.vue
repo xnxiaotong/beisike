@@ -1,7 +1,7 @@
 <template>
   <div class="cclass">
     <div class="route">
-      <span class="ospan" :class="{active:active==1}" @click="active=1">自营</span>
+      <span class="ospan" :class="{active:active==1}" @click="zy">自营</span>
       <span class="ospan" :class="{active:active==2}" @click="notab('RP')">贝式严选</span>
     </div>
     <div class="ziying" v-show="active==1">
@@ -77,13 +77,19 @@ export default {
         { name: "伴手礼", mark: "JZ" }
       ],
       goodlist: [],
-      activelist: []
+      activelist: [],
+      // 记住位置
+      num: 0
     };
   },
   components: {
     hphuaxian
   },
   methods: {
+    zy() {
+      this.active = 1;
+      this.one(this.tab[this.num].mark, this.num);
+    },
     // 自营/贝时严选的切换
     notab(mark) {
       this.active = 2;
@@ -106,6 +112,7 @@ export default {
         }
       });
       this.activelist = activelist;
+      this.num = index;
       // console.log(this.activelist);
     },
     // 传参=>跳转到详情页
