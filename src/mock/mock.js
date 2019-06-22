@@ -5,7 +5,6 @@ import MockAdapter from 'axios-mock-adapter';
 import { UsersData } from './data/userInfo'
 let mock = new MockAdapter(axios);
 // 引入storejs 根据内存做判断
-import Store from "storejs"
 mock.onGet('/login').reply(config => {
     // console.log(config.params) //里面有传过来的参数
     // 做一个数据效验
@@ -13,8 +12,7 @@ mock.onGet('/login').reply(config => {
         code: 200,
         msg: ''
     };
-    var userlist = Store.get("userlist") || UsersData;
-
+    var userlist = userinfo;
     userlist.forEach(ele => {
         if (ele.username == config.params.username && ele.password == config.params.password) {
             data.msg = "登陆成功";
@@ -31,26 +29,28 @@ mock.onGet('/login').reply(config => {
     return [200, data];
 
 });
-var userinfo=UsersData;
+var userinfo = [UsersData[0]];
 mock.onGet('/reg').reply(config => {
-    console.log(userinfo);
     var data = { code: 0, msg: "", data: {} };
+    var bool = true;
     var info = config.params;
-    for (var i = 0; i < userinfo.length; i++) {
-        if (userinfo[i].username == info.username) {
+    userinfo.forEach(ele => {
+        var bj = ele.username == info.username;
+        if (bj) {
+            bool = false;
             data.msg = "用户名已经存在";
             data.data.code = 0;
-            return [200, data];
-        } else if (info.username && info.password && info.name) {
+        }
+    })
+    // bool要写在循环外面 不然不会有效果(类似购物车vuex的逻辑)
+    if (bool) {
+        if (info.username && info.password && info.name) {
             data.msg = "注册成功";
             data.data.code = 1;
-            info.avatar = 'https://avatars0.githubusercontent.com/u/22588905?v=4&s=120',
             userinfo.push(info);
-            return [200, data];
         } else {
             data.data.code = -1;
             data.msg = "请把信息填写完整";
-            return [200, data];
         }
     }
     return [200, data];

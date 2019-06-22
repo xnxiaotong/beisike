@@ -48,6 +48,7 @@ const mutations = {
         Store.set("foods", state.cartlist.list)
         Store.set("number", state.cartlist.count)
     },
+   
 }
 //定义 computed(属性计算)
 const getters = {

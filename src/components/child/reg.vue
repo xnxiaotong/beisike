@@ -12,12 +12,8 @@
         <input v-model="password">
       </label>
     </p>
-    <p>
-      <label>
-        <span>头像:</span>
-        <i v-fileUpload="setInputFile">点击上传头像</i>
-      </label>
-    </p>
+    <p>头像:</p>
+    <p v-fileUpload="setInputFile">点击上传头像</p>
     <p>
       <label>
         <span>昵称:</span>
@@ -27,11 +23,11 @@
     <p>
       <button class="log" @click="Mockreg">注册</button>
     </p>
-    <img :src="url" alt>
   </div>
 </template>
 <script>
 import Mock from "mockjs";
+import { MessageBox } from "mint-ui";
 export default {
   name: "reg",
   data() {
@@ -54,20 +50,24 @@ export default {
       var params = {
         username: this.username,
         password: this.password,
-        // avatar: this.url,
+        avatar: this.url,
         name: this.name,
         id: Mock.Random.guid()
       };
       this.$apis.Mockreg(params).then(res => {
-        console.log(res);
         if (res.data.data.code == 1) {
-          alert("注册成功");
+          MessageBox.alert("注册成功,请重新登陆");
+          this.$router.push({
+            path: "/user",
+            query: {
+              bool: true
+            }
+          });
         } else if (res.data.data.code == -1) {
-          alert("信息不完整");
+          MessageBox.alert("信息不完整");
         } else {
-          alert("用户名已经存在");
+          MessageBox.alert("用户名已经存在");
         }
-        // console.log(res);
       });
     }
   },

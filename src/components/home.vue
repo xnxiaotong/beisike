@@ -24,7 +24,7 @@ export default {
   },
   mounted() {
     this.$store.commit("Vuexinit");
-  },
+  }
 };
 </script>
 <style scoped lang='scss'>

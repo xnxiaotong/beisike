@@ -1,123 +1,149 @@
 <template>
-  <div class="buycar">
-    <div class="buyfooods">
-      <h3 v-if="$store.state.cartlist.list.length==0">购物车是空的哦~</h3>
-      <ul
-        id="carstyle"
-        v-if="$store.state.cartlist.list.length>0"
-        style="margin:0 0 4vw 0; background: #fff;padding:0;"
-      >
-        <li
-          v-for="(item,index) in cartlist"
-          :key="index"
-          style="list-style:none;padding-bottom: 4.26vw;height:47vw;"
+  <div>
+    <div v-show="!bool" class="buycar">
+      <div class="buyfooods">
+        <h3 v-if="$store.state.cartlist.list.length==0">购物车是空的哦~</h3>
+        <ul
+          id="carstyle"
+          v-if="$store.state.cartlist.list.length>0"
+          style="margin:0 0 4vw 0; background: #fff;padding:0;"
         >
-          <div style="float: left; margin-left: 4vw; margin-right: 3vw;">
-            <span style="width: 5.33vw;">
-              <input v-model="item.check" type="checkbox" style="margin-top: 17vw;" @click="sc">
-            </span>
-          </div>
-          <div style="float: left;border-bottom:1px solid #ccc;margin-bottom:6vw;">
-            <div style="float:left;padding-top:4.26vw;">
-              <img :src="item.img" style="width:30.4vw" @click="toshow(item.ins)">
+          <li
+            v-for="(item,index) in cartlist"
+            :key="index"
+            style="list-style:none;padding-bottom: 4.26vw;height:47vw;"
+          >
+            <div style="float: left; margin-left: 4vw; margin-right: 3vw;">
+              <span style="width: 5.33vw;">
+                <!-- <input v-model="item.check" type="checkbox" style="margin-top: 17vw;" @click="sc"> -->
+                <img
+                  v-show="item.check==false"
+                  style="margin-top: 17vw;width:5.33vw"
+                  @click="sc(item,$event)"
+                  src="https://res.bestcake.com/m-images/order/mw_firm_duihao_2.jpg"
+                >
+                <img
+                  v-show="item.check==true"
+                  style="margin-top: 17vw;width:5.33vw"
+                  @click="sc(item,$event)"
+                  src="https://res.bestcake.com/m-images/order/mw_firm_duihao_1.jpg"
+                >
+              </span>
             </div>
-            <div style="float:left;" class="ddpp">
-              <p class="pp">{{item.name}}</p>
-              <p class="pp">
-                <span>{{item.size}}</span>
-                <span class="spt">
-                  <button @click="del(item,item.num)">-</button>
-                  <i>{{item.num}}</i>
-                  <button @click="add(item,item.num)">+</button>
-                </span>
-              </p>
-              <p class="pp">{{item.zj}}</p>
+            <div style="float: left;border-bottom:1px solid #ccc;margin-bottom:6vw;">
+              <div style="float:left;padding-top:4.26vw;">
+                <img :src="item.img" style="width:30.4vw" @click="toshow(item.ins)">
+              </div>
+              <div style="float:left;" class="ddpp">
+                <p class="pp">{{item.name}}</p>
+                <p class="pp">
+                  <span>{{item.size}}</span>
+                  <span class="spt">
+                    <button @click="del(item,item.num)">-</button>
+                    <i>{{item.num}}</i>
+                    <button @click="add(item,item.num)">+</button>
+                  </span>
+                </p>
+                <p class="pp">{{item.zj}}</p>
+              </div>
             </div>
-          </div>
-          <h4 class="youhui">
-            优惠活动
-            <span>不参与活动</span>
-          </h4>
-        </li>
-      </ul>
-    </div>
-    <div class="rexiao">
-      <div>
-        <p>Hot Recommend</p>
-        <p class="buyp"></p>
-        <p class="buypt">热销新品推荐</p>
+            <h4 class="youhui">
+              优惠活动
+              <span>不参与活动</span>
+            </h4>
+          </li>
+        </ul>
       </div>
-      <ul>
-        <li>
-          <img
-            src="https://res.bestcake.com\m-images\cart\mw_firm_sq.jpg"
-            @click="toshow1('吉致生巧','JZ')"
-            alt
-          >
-          <p>伴手礼系列-吉致生巧</p>
-          <p>
-            <span>168.00/1盒</span>
-          </p>
-          <div>
-            <img src="https://res.bestcake.com\m-images\order\mw_firm_gwc.jpg" alt>
-            <!--  @click="addrx('吉致生巧',987,'168','1盒','https://res.bestcake.com/m-images/jz-detail/吉致生巧/吉致生巧-1.jpg',)" -->
-          </div>
-        </li>
-        <li>
-          <img
-            src="https://res.bestcake.com\m-images\cart\mw_firm_nzt_v1.jpg"
-            @click="toshow1('吉致牛轧糖(巴旦木味)','JZ')"
-            alt
-          >
-          <p>伴手礼系列-吉致生巧</p>
-          <p>
-            <span>168.00/1盒</span>
-          </p>
-          <div>
-            <img src="https://res.bestcake.com\m-images\order\mw_firm_gwc.jpg" alt>
-            <!--  @click="addrx('吉致牛轧糖(巴旦木味)',925,'168','1盒','https://res.bestcake.com/m-images/jz-detail/吉致牛轧糖(巴旦木味)/吉致牛轧糖(巴旦木味)-1.jpg',)" -->
-          </div>
-        </li>
-        <li>
-          <img
-            src="https://res.bestcake.com\m-images\cart\mw_firm_pf_v1.jpg"
-            @click="toshow1('吉致泡芙','JZ')"
-            alt
-          >
-          <p>伴手礼系列-吉致生巧</p>
-          <p>
-            <span>168.00/1盒</span>
-          </p>
-          <div>
-            <img src="https://res.bestcake.com\m-images\order\mw_firm_gwc.jpg" alt>
-            <!--  @click="addrx('吉致泡芙',654,'88','0.8磅','https://res.bestcake.com/m-images/jz-detail/吉致泡芙/吉致泡芙-1.jpg',)" -->
-          </div>
-        </li>
-      </ul>
-    </div>
-    <div class="jiesuan">
-      <ul>
-        <li>
-          <input type="checkbox" v-model="sel" @click="qx">
-          <span>全选</span>
-        </li>
-        <li>
-          <p @click="cle">清空</p>
-        </li>
-        <li class="blis">
-          <p>
-            合计:
-            <span>{{allprice}}</span>
-          </p>
-          <p>
-            已优惠:
-            <i>0.00</i>
-          </p>
-        </li>
-        <li @click="jiesuan">
-          <mt-button type="primary">结算</mt-button>
-        </li>
-      </ul>
+      <div class="rexiao">
+        <div>
+          <p>Hot Recommend</p>
+          <p class="buyp"></p>
+          <p class="buypt">热销新品推荐</p>
+        </div>
+        <ul>
+          <li>
+            <img
+              src="https://res.bestcake.com\m-images\cart\mw_firm_sq.jpg"
+              @click="toshow1('吉致生巧','JZ')"
+              alt
+            >
+            <p>伴手礼系列-吉致生巧</p>
+            <p>
+              <span>168.00/1盒</span>
+            </p>
+            <div>
+              <img src="https://res.bestcake.com\m-images\order\mw_firm_gwc.jpg" alt>
+              <!--  @click="addrx('吉致生巧',987,'168','1盒','https://res.bestcake.com/m-images/jz-detail/吉致生巧/吉致生巧-1.jpg',)" -->
+            </div>
+          </li>
+          <li>
+            <img
+              src="https://res.bestcake.com\m-images\cart\mw_firm_nzt_v1.jpg"
+              @click="toshow1('吉致牛轧糖(巴旦木味)','JZ')"
+              alt
+            >
+            <p>伴手礼系列-吉致生巧</p>
+            <p>
+              <span>168.00/1盒</span>
+            </p>
+            <div>
+              <img src="https://res.bestcake.com\m-images\order\mw_firm_gwc.jpg" alt>
+              <!--  @click="addrx('吉致牛轧糖(巴旦木味)',925,'168','1盒','https://res.bestcake.com/m-images/jz-detail/吉致牛轧糖(巴旦木味)/吉致牛轧糖(巴旦木味)-1.jpg',)" -->
+            </div>
+          </li>
+          <li>
+            <img
+              src="https://res.bestcake.com\m-images\cart\mw_firm_pf_v1.jpg"
+              @click="toshow1('吉致泡芙','JZ')"
+              alt
+            >
+            <p>伴手礼系列-吉致生巧</p>
+            <p>
+              <span>168.00/1盒</span>
+            </p>
+            <div>
+              <img src="https://res.bestcake.com\m-images\order\mw_firm_gwc.jpg" alt>
+              <!--  @click="addrx('吉致泡芙',654,'88','0.8磅','https://res.bestcake.com/m-images/jz-detail/吉致泡芙/吉致泡芙-1.jpg',)" -->
+            </div>
+          </li>
+        </ul>
+      </div>
+      <div class="jiesuan">
+        <ul>
+          <li>
+            <!-- <input type="checkbox" v-model="sel" @click="qx"> -->
+            <img
+              v-show="sel==false"
+              style="margin-top: 4.34vw;width:5.33vw;margin-left:4vw"
+              @click="qx"
+              src="https://res.bestcake.com/m-images/order/mw_firm_duihao_2.jpg"
+            >
+            <img
+              v-show="sel==true"
+              style="margin-top: 4.34vw;width:5.33vw;margin-left:4vw"
+              @click="qx"
+              src="https://res.bestcake.com/m-images/order/mw_firm_duihao_1.jpg"
+            >
+            <span>全选</span>
+          </li>
+          <li>
+            <p @click="cle">清空</p>
+          </li>
+          <li class="blis">
+            <p>
+              合计:
+              <span>{{allprice}}</span>
+            </p>
+            <p>
+              已优惠:
+              <i>0.00</i>
+            </p>
+          </li>
+          <li @click="jiesuan">
+            <mt-button type="primary">结算</mt-button>
+          </li>
+        </ul>
+      </div>
     </div>
   </div>
 </template>
@@ -128,6 +154,7 @@ export default {
   name: "buycar",
   data() {
     return {
+      bool: false,
       // 选择全选按钮
       sel: false,
       zjprice: 0,
@@ -135,7 +162,8 @@ export default {
       chec: false,
       cartlist: [],
       // 结算的
-      apric: []
+      apric: [],
+      img: "https://res.bestcake.com/m-images/order/mw_firm_duihao_2.jpg"
     };
   },
   mounted() {
@@ -222,6 +250,7 @@ export default {
       }
     },
     qx() {
+      this.sel = !this.sel;
       setTimeout(() => {
         if (this.sel == true) {
           var num = 0;
@@ -240,8 +269,12 @@ export default {
     // 结算位置 如果没有登陆跳转到登陆页面
     jiesuan() {
       if (!Store.has("users")) {
+        // this.bool = true;
         this.$router.push({
-          path: "/my"
+          path: "/user",
+          query: {
+            bool: true
+          }
         });
       }
     },
@@ -265,9 +298,9 @@ export default {
         }
       }, 80);
     },
-    sc() {
+    sc(item, e) {
       this.aprice();
-      // console.log(this.apric);
+      item.check = !item.check;
     }
   },
   computed: {

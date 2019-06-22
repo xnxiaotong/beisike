@@ -10,9 +10,9 @@
 <script>
 export default {
   name: "App",
-//  mounted() {
-//    console.log(this.$route.path);
-//  },
+ mounted() {
+  //  console.log(this.$route.path);
+ },
 };
 </script>
 

@@ -3,7 +3,7 @@ import Router from 'vue-router'
 
 Vue.use(Router)
 
-export default new Router({
+var router = new Router({
   routes: [
     {
       path: '/',
@@ -37,9 +37,15 @@ export default new Router({
           component: resolve => require(['@/components/main/buycar'], resolve),
         },
         {
-          path: 'my',
-          name: 'my',
-          component: resolve => require(['@/components/main/my'], resolve),
+          path: 'user',
+          name: 'user',
+
+          component: resolve => require(['@/components/main/user'], resolve),
+          meta: {
+            keepAlive: false,  //true 禁止重复加载, false不禁止
+            title: '我的',
+            query: fp,
+          },
         },
         {
           path: 'xiangqing',
@@ -61,3 +67,18 @@ export default new Router({
     }
   ]
 })
+var fp = "";
+router.beforeEach((to, from, next) => {
+  // console.log(from.path);
+  if (to.path == "/user") {
+    fp = from.path;
+    if (from.path == "/user") {
+      next({ path: fp })
+    }
+  }
+  next();
+
+})
+
+console.log(fp);
+export default router;

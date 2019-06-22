@@ -1,6 +1,9 @@
 <template>
   <div id="my">
     <div class="my" v-show="bool">
+      <p style="height:10vw;margin:5vw 0;padding:0 0 0 5vw;color:rgba(9,152,154,1)">
+        <i class="fa fa-chevron-left fa-2x" @click="tabs"></i>
+      </p>
       <p>
         <label>
           <span>用户名:</span>
@@ -15,6 +18,9 @@
       </p>
       <p>
         <button @click="logins" class="log">登陆</button>
+      </p>
+      <p>
+        <button @click="reg" class="reg">无账号-点击注册</button>
       </p>
     </div>
     <div v-show="!bool" class="minfo">
@@ -84,7 +90,10 @@ export default {
           });
           this.bool = false;
           this.username = res.data.userinfo.name;
-          this.img = res.data.userinfo.avatar;
+          this.img =
+            res.data.userinfo.avatar == ""
+              ? "https://avatars0.githubusercontent.com/u/22588905?v=4&s=120"
+              : res.data.userinfo.avatar;
           Store.set("users", res.data.userinfo);
         } else if (res.data.code == -1) {
           Toast({
@@ -106,16 +115,33 @@ export default {
           img: img
         }
       });
+    },
+    reg() {
+      this.$router.push({
+        path: "/reg"
+      });
+    },
+    tabs() {
+      history.back();
+    },
+    pageinit() {
+      this.user = Store.get("users") || [];
+      // console.log(this.user);
+      if (this.user.length != 0) {
+        $(".uname").val(this.user.username);
+        $(".upwd").val(this.user.password);
+        this.bool = false;
+        this.img =
+          this.user.avatar == ""
+            ? "https://avatars0.githubusercontent.com/u/22588905?v=4&s=120"
+            : this.user.avatar;
+      } else {
+        this.bool = true;
+      }
     }
   },
   mounted() {
-    this.user = Store.get("users") || [];
-    // console.log(this.user);
-    if (this.user) {
-      $(".uname").val(this.user.username);
-      $(".upwd").val(this.user.password);
-      this.logins();
-    }
+    this.pageinit();
   }
 };
 </script>
@@ -147,11 +173,20 @@ export default {
         border: 1px solid #b9e9eb;
       }
       .log {
-        width: 20vw;
+        width: 30vw;
         height: 10vw;
-        margin-left: 30%;
+        margin-left: 20%;
         border: 1px solid #b9e9eb;
         background: #7cf1f5;
+        text-align: center;
+      }
+      .reg {
+        width: 30vw;
+        height: 10vw;
+        margin-left: 20%;
+        border: 1px solid #b9e9eb;
+        background: #7cf1f5;
+        text-align: center;
       }
     }
   }
@@ -164,6 +199,11 @@ export default {
       margin-left: 35%;
       border-radius: 50%;
       overflow: hidden;
+      img {
+        width: 30vw;
+        height: 30vw;
+        display: block;
+      }
     }
     p {
       width: 100%;

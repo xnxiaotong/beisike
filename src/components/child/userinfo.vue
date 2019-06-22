@@ -45,9 +45,8 @@ export default {
       MessageBox.confirm("是否退出?").then(
         action => {
           Store.remove("users");
-          window.location.reload();
           this.$router.push({
-            path: "/homepage"
+            path: "/homepage",
           });
         },
         () => {

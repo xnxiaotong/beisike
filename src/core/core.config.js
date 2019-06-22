@@ -3,6 +3,7 @@ import fliter from "@/core/fliter/index"
 import global from "@/core/global/global"//返回了以个对象{getParam:fn()}
 import apis from "@/core/api/index" //返回了以个对象{joke:fn(),getServerStr:fn()}
 import derective from "@/core/directive/index"
+
 import $ from "jquery";
 export default (Vue) => {
     tempFn(Vue);
@@ -14,5 +15,6 @@ export default (Vue) => {
     Vue.prototype.$global = global;
     Vue.prototype.$apis = apis;
     Vue.prototype.$ = $;
+    Vue.prototype.$eventHub = new Vue();
 
 }

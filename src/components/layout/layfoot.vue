@@ -6,7 +6,7 @@
           :id="item.key"
           v-for="(item,index) in routpath"
           :key="index"
-          @click.native="tab(index,item.path)"
+          @click.native="tab(index,item.path,item.query?item.query:'')"
         >
           <p :class="item.ico"></p>
           <p>{{item.name}}</p>
@@ -43,18 +43,24 @@ export default {
         },
         {
           name: "我的",
-          path: "/my",
-          key: "my",
-          ico: ["fa", "fa-user-o", "fa-2x"]
+          path: "/user",
+          key: "user",
+          ico: ["fa", "fa-user-o", "fa-2x"],
+          query: {
+            bool: true
+          }
         }
       ]
     };
   },
   methods: {
-    tab(index, pt) {
+    tab(index, pt,qur) {
       // console.log(index,pt);
+      this.$eventHub.$emit("sub", { bool: true });
       this.$router.push({
-        path: pt
+        path: pt,
+        query:qur
+
       });
     }
   }

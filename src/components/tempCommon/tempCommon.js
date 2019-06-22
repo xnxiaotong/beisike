@@ -8,12 +8,13 @@ import { Navbar, TabItem } from 'mint-ui';
 import { TabContainer, TabContainerItem } from 'mint-ui';
 // 底部导航栏
 import { Tabbar } from 'mint-ui';
-
+import my from "@/components/main/my.vue"
 
 
 
 export default (Vue) => {
     Vue.component('layfoot', layfoot)
+    Vue.component('my', my)
     Vue.component(Swipe.name, Swipe);
     Vue.component(SwipeItem.name, SwipeItem);
     Vue.component(Button.name, Button);

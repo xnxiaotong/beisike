@@ -16,6 +16,9 @@ Vue.use(VueLazyload, {
 // 引入字体
 import 'font-awesome/css/font-awesome.css'
 import store from "@/core/store/index"
+// 引入动画
+import animate from 'animate.css'
+Vue.use(animate);
 Vue.config.productionTip = false
 // 动态改变网页标题
 Vue.use(require('vue-wechat-title'));

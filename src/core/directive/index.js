@@ -18,8 +18,9 @@ export default (Vue) => {
       node.multiple = data.multiple ? "multiple" : "";
       node.style.display = "none";
       el.append(node);
-      el.onclick = () => {
+      el.onclick = (e) => {
         el.children[0].click();
+        
       }
     }
     var inputFile = el.children[0];
